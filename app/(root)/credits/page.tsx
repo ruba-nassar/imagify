@@ -1,4 +1,4 @@
-import {  auth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -11,7 +11,7 @@ import Checkout from "@/components/shared/Checkout";
 import { SignedIn } from "@clerk/nextjs";
 
 const Credits = async () => {
-  const { userId } = auth();
+  const { userId } = await auth();  // Await the auth function to get the userId
 
   if (!userId) redirect("/sign-in");
 
