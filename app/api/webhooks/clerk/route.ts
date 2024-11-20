@@ -1,14 +1,11 @@
 /* eslint-disable camelcase */
+import { clerkClient } from "@clerk/nextjs/server";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook } from "svix";
-import { clerkClient } from "@clerk/nextjs/server";
-
 
 import { createUser, deleteUser, updateUser } from "@/lib/actions/user.actions";
-
-console.log(clerkClient);
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -75,15 +72,14 @@ export async function POST(req: Request) {
 
     const newUser = await createUser(user);
     const clerk = await clerkClient();
+ 
     // Set public metadata
     if (newUser) {
-        await clerk.users.updateUserMetadata(user.clerkId, {
-            publicMetadata: {
-              userId: newUser._id,
-            },
-          });
-          
-          
+      await clerk.users.updateUserMetadata(user.clerkId, {
+        publicMetadata: {
+          userId: newUser._id,
+        },
+      });
     }
 
     return NextResponse.json({ message: "OK", user: newUser });
@@ -118,8 +114,4 @@ export async function POST(req: Request) {
   console.log("Webhook body:", body);
 
   return new Response("", { status: 200 });
-}
-
-function Clerk(arg0: { apiKey: string | undefined; }) {
-    throw new Error("Function not implemented.");
 }
